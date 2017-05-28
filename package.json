@@ -18,9 +18,6 @@
     "url": "https://github.com/SignpostMarv/AjaxLife-client/issues"
   },
   "homepage": "https://github.com/SignpostMarv/AjaxLife-client#readme",
-  "scripts": {
-    "beautify-libs": "js-beautify < ./AjaxLife.Libs.js > ./AjaxLife.Libs-pretty.js && rm AjaxLife.Libs.js && mv AjaxLife.Libs-pretty.js AjaxLife.Libs.js"
-  },
   "dependencies": {},
   "devDependencies": {
     "eslint": "^1.0.0",
@@ -29,7 +26,6 @@
     "grunt-cli": "^0.1.13",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-eslint": "^17.3.2",
-    "js-beautify": "^1.6.14",
     "load-grunt-tasks": "^3.4.0"
   }
 }
