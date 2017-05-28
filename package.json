@@ -1,4 +1,25 @@
 {
+  "name": "ajaxlife-client",
+  "description": "AjaxLife Client",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SignpostMarv/AjaxLife-client.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SignpostMarv/AjaxLife-client/issues"
+  },
+  "homepage": "https://github.com/SignpostMarv/AjaxLife-client#readme",
+  "author": [
+    {
+      "name": "Katharine Berry"
+    },
+    {
+      "name": "SignpostMarv"
+    }
+  ],
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^1.0.0",
     "eslint-config-airbnb": "^5.0.0",
