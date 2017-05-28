@@ -1172,7 +1172,7 @@ function $(A) {
 if (Prototype.BrowserFeatures.XPath) {
     document._getElementsByXPath = function(B, A) {
         var F = [];
-        var E = document.evaluate(B, $(A) || document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        var E = document.evaluate(B, $(A)[0] || document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
         for (var C = 0, D = E.snapshotLength; C < D; C++) {
             F.push(E.snapshotItem(C))
         }
