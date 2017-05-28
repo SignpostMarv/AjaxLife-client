@@ -127,24 +127,22 @@ function initui()
   domemorycheck();
   $('uiscreen').show();
   var wait = AjaxLife.Widgets.Modal.wait(_("Login.LoadingSession"));
-  var link = new Ext.data.Connection({timeout: 30000});
-  link.request({
-    url: "api/sessiondetails",
-    method: "POST",
-    params: {
-      sid: gSessionID
-    },
-    callback: function(options, success, response) {
-      response = response.responseText;
+  let params = new URLSearchParams();
+  params.append('sid', gSessionID);
+  axios.post(
+    'api/sessiondetails',
+    params
+  ).then((r) => {
+      let data = r.data;
+      let response = JSON.stringify(data);
       AjaxLife.Debug("login: sessiondata: "+response);
       wait.hide();
       wait = false;
-      if(!success)
+      if(r.status !== 200)
       {
         AjaxLife.Widgets.Modal.alert(_("Login.SessionLoadFailed"));
         return;
       }
-      var data = Ext.util.JSON.decode(response);
       gRegionCoords = data.RegionCoords;
       gRegion = data.Region;
       gPosition = data.Position;
@@ -167,7 +165,6 @@ function initui()
       $(document.body).addClassName("loggedin").removeClassName("loggingin");
       AjaxLife.Debug("login: Running AjaxLife init...");
       AjaxLife.Startup();
-    }
   });
 }
 
@@ -216,28 +213,25 @@ function handlelogin()
     hanging.updateText(_("Login.LoggingIn"));
     // Send the request and wait up to two minutes for a response.
     // Pass on all data, and wait for the response.
-    var link = new Ext.data.Connection({timeout: 120000});
-    link.request({
-      url: "api/login",
-      method: "POST",
-      params: {
-        logindata: logindetails,
-        grid: $('grid').getValue(),
-        location: $('location').getValue(),
-        sim: $('loginsim').value,
-        session: gSessionID
-      },
-      // If the request was successful, submit the form containing the sessionid to the UI page.
-      // Otherwise show the error.
-      callback: function(options, success, response) {
-        AjaxLife.Debug("login: Received login response: "+response.responseText);
-        hanging.hide();
-        hanging = false;
-        if(success)
-        {
+    let params = new URLSearchParams();
+    params.append('logindata', logindetails);
+    params.append('grid', $('grid').getValue());
+    params.append('location', $('location').getValue());
+    params.append('sim', $('loginsim').value);
+    params.append('session', gSessionID);
+    axios.post(
+      'api/login',
+      params,
+      {
+        responseType: 'json',
+        timeout: 120000
+      }
+    ).then((r) => {
+          let response = r.data;
+          console.log(r);
+          let responseText = JSON.stringify(response);
           try
           {
-            var response = Ext.util.JSON.decode(response.responseText);
             if(response.success)
             {
               initui();
@@ -250,14 +244,13 @@ function handlelogin()
           }
           catch(e)
           {
-            AjaxLife.Widgets.Modal.alert("Server Error","A C# Exception was caught:<pre>"+response.responseText.escapeHTML()+"</pre>",revertscreen);
+            console.error(e);
+            AjaxLife.Widgets.Modal.alert("Server Error","A C# Exception was caught:<pre>"+responseText.escapeHTML()+"</pre>",revertscreen);
           }
-        }
-        else
-        {
-          AjaxLife.Widgets.Modal.alert(_("Login.Error"),_("Login.SomethingWrong"),revertscreen);
-        }
-      }
+    }).catch((err) => {
+      console.error(err);
+      AjaxLife.Debug("login: Login failure: "+ err);
+      AjaxLife.Widgets.Modal.alert(_("Login.Error"), err.escapeHTML().gsub('\n','<br />\n'),revertscreen);
     });
     AjaxLife.Debug("login: Made login request.");
   }, 100);
