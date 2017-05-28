@@ -13,3 +13,6 @@ indent_size = 2
 
 [.eslintrc]
 indent_size = 2
+
+[package.json]
+indent_size = 2
