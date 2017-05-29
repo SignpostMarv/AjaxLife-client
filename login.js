@@ -232,7 +232,7 @@ function handlelogin()
           let responseText = JSON.stringify(response);
           try
           {
-            if(response.success)
+            if(r.status === 200 && 'success' in response && response.success)
             {
               initui();
             }
@@ -250,7 +250,7 @@ function handlelogin()
     }).catch((err) => {
       console.error(err);
       AjaxLife.Debug("login: Login failure: "+ err);
-      AjaxLife.Widgets.Modal.alert(_("Login.Error"), err.escapeHTML().gsub('\n','<br />\n'),revertscreen);
+      AjaxLife.Widgets.Modal.alert(_("Login.Error"), (err + '').escapeHTML().gsub('\n','<br />\n'),revertscreen);
     });
     AjaxLife.Debug("login: Made login request.");
   }, 100);
