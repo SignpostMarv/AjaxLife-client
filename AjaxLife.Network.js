@@ -37,16 +37,13 @@ AjaxLife.Network.logout = function(hidemessage) {
   {
     hanging = AjaxLife.Widgets.Modal.wait(_("Network.LoggingOut"));
   }
-  var link = new Ext.data.Connection();
-  link.request({
-    url: "api/logout",
-    method: "POST",
-    params: {
-      sid: gSessionID
-    },
-    callback: function(options, success, response)
-    {
-      if(success)
+  let params = new URLSearchParams();
+  params.set('sid', gSessionID);
+  axios.post(
+    'api/logout',
+    params
+  ).then((r) => {
+      if(r.status === 200)
       {
         AjaxLife.Network.MessageQueue.shutdown();
         hanging.hide();
@@ -65,7 +62,9 @@ AjaxLife.Network.logout = function(hidemessage) {
       {
         AjaxLife.Widgets.Modal.alert(_("Network.Error"),_("Network.LogoutError"));
       }
-    }
+  }).catch((err) => {
+    console.error(err);
+    AjaxLife.Widgets.Modal.alert(_("Network.Error"),_("Network.LogoutError"));
   });
 };
 
@@ -78,8 +77,8 @@ AjaxLife.Network.logout = function(hidemessage) {
 // never happen, and as such is considered an error.
 AjaxLife.Network.MessageQueue = function() {
   // Private
+  let abort;
   var requesting = false;
-  var link = new Ext.data.Connection({timeout: 60000});
   var callbacks = {};
   var interval = false;
   var lastmessage = false;
@@ -202,13 +201,22 @@ AjaxLife.Network.MessageQueue = function() {
     // If the queue is already running, abort.
     if(requesting) return;
     requesting = true;
-    link.request({
-      url: "api/events",
-      method: "POST",
-      params: {
-        sid: gSessionID
-      },
-      callback: queuecallback
+    let params = new URLSearchParams();
+    params.append('sid', gSessionID);
+    axios.post(
+      'api/events',
+      params,
+      {
+        timeout: 60000,
+        cancelToken: new axios.CancelToken((c) => {
+          cancel = c;
+        })
+      }
+    ).then((r) => {
+      queuecallback(r.data);
+    }).catch((err) => {
+      console.error(err);
+      AjaxLife.Widgets.Ext.msg("Error in queuecallback",e.name+" - "+e.message);
     });
   };
 
@@ -250,7 +258,9 @@ AjaxLife.Network.MessageQueue = function() {
       requesting = false;
       AjaxLife.Network.Connected = false;
       clearInterval(interval);
-      link.abort();
+      if (abort) {
+        abort();
+      }
     },
     // Very important function - registers a callback for incoming data.
     // This is accomplished by adding it to an array of callbacks.
@@ -302,7 +312,6 @@ AjaxLife.Network.SignedMessages = {
 // once the server responds to the request.
 AjaxLife.Network.Send = function(message, opts) {
   if(!AjaxLife.Network.Connected) return false;
-  var link = new Ext.data.Connection({timeout: 60000});
   if(!opts)
   {
     opts = {};
@@ -318,42 +327,37 @@ AjaxLife.Network.Send = function(message, opts) {
   // We have to do any alterations to the query before querystring is defined.
   var signed = opts.signed;
   delete opts.signed; // This doesn't throw errors, even if the opts.signed never existed.
-  var querystring = Hash.toQueryString(opts); // This is deprecated in Prototype 1.6 - if we upgrade, change to Object.toQueryString().
+  let querystring = new URLSearchParams();
+  Object.keys(opts).forEach((optsKey) => {
+    querystring.set(optsKey, opts[optsKey]);
+  });
   // Used to ensure that you can't impersonate someone by grabbing the SID -
   // at least for important messages.
   // This signs messages where signed is true, or the message is in the list of messages to sign,
   // unless signed is explicitly false.
   if(signed || (AjaxLife.Network.SignedMessages[message] && signed !== false))
   {
+    Object.keys(opts).forEach((optsKey) => {
+      querystring.set(optsKey, opts[optsKey]);
+    });
     querystring = Hash.toQueryString(opts); // Do it again without the signed: true part.
     var tohash = (++AjaxLife.SignedCallCount).toString() + querystring + AjaxLife.Signature;
     var hash = md5(tohash);
     AjaxLife.Debug("Network: Signing '"+message+"' message with '"+hash+"' (from '"+tohash+"')");
-    querystring += '&hash='+hash;
+    querystring.set('hash', hash);
   }
-  params = {
-    url: "api/send",
-    method: "POST",
-    params: querystring
-  };
-  if(callbackf || signed)
-  {
-    params.callback = function(options, success, response) {
-      if(success)
-      {
-        if(callbackf)
+  axios.post(
+    'api/send',
+    querystring,
+    {
+      timeout: 60000
+    }
+  ).then((r) => {
+    let data = r.data;
+      if (r.status === 200) {
+        if (callbackf)
         {
-          // If the exception is thrown by the first line we didn't have valid JSON.
-          // Otherwise something's wrong with the callback.
-          try
-          {
-            var data = Ext.util.JSON.decode(response.responseText);
             callbackf(data);
-          }
-          catch(e)
-          {
-            AjaxLife.Debug("Network: Response: "+response.responseText);
-          }
         }
       }
       // No success. Either the server died or a timeout. Can't really tell.
@@ -366,9 +370,15 @@ AjaxLife.Network.Send = function(message, opts) {
         }
         AjaxLife.Widgets.Ext.msg(_("Network.Error"),_("Network.GenericSendError"));
       }
-    };
-  }
-  link.request(params);
+  }).catch((err) => {
+    console.error(err);
+    // If the send failed the server presumably didn't get the message, so knock this down one to make sure they still match.
+    if(signed)
+    {
+      --AjaxLife.SignedCallCount;
+    }
+    AjaxLife.Widgets.Ext.msg(_("Network.Error"),_("Network.GenericSendError"));
+  });
 };
 
 AjaxLife.Network.GenericRequest = function(url, opts) {
