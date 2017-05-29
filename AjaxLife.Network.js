@@ -372,7 +372,7 @@ AjaxLife.Network.Send = function(message, opts) {
 };
 
 AjaxLife.Network.GenericRequest = function(url, opts) {
-  var link = new Ext.data.Connection();
+  let params = new URLSearchParams();
   if(!opts)
   {
     opts = {};
@@ -383,31 +383,22 @@ AjaxLife.Network.GenericRequest = function(url, opts) {
     callbackf = opts.callback;
     opts.callback = null;
   }
-  params = {
-    url: "differentorigin.kat?url="+escape(url),
-    method: "POST",
-    params: opts
-  };
-  if(callbackf)
-  {
-    params.callback = function(options, success, response) {
-      if(success)
-      {
-        try
-        {
-          var data = Ext.util.JSON.decode(response.responseText);
+  Object.keys(opts).forEach(function (optsKey){
+    params.append(optsKey, opts[optsKey]);
+  });
+  axios.post(
+    ('differentorigin.kat?url=' + encodeURIComponent(url)),
+    params,
+    {
+      responseType: 'json'
+    }
+  ).then((r) => {
+    let data = r.data;
+    if (callbackf) {
           callbackf(data);
-        }
-        catch(e)
-        {
-          callbackf(response.responseText);
-        }
-      }
-      else
-      {
+    }
+  }).catch((err) => {
+    console.error(err);
         AjaxLife.Widgets.Ext.msg(_("Network.Error"),_("Network.GenericRequestError"));
-      }
-    };
-  }
-  link.request(params);
+  });
 };
