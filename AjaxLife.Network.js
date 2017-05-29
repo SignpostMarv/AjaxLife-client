@@ -155,7 +155,7 @@ AjaxLife.Network.MessageQueue = function() {
   };
 
   // This function deals with incoming data from the queue.
-  function queuecallback(options, success, response)
+  function queuecallback(success, data)
   {
     lastmessage = new Date();
     deadserverwarned = false;
@@ -167,16 +167,6 @@ AjaxLife.Network.MessageQueue = function() {
     {
       if(success)
       {
-        // If we aren't sent back valid JSON this fails. We just ignore it if that happens.
-        try
-        {
-          var data = Ext.util.JSON.decode(response.responseText);
-        }
-        catch(e)
-        {
-          // Meep.
-          return;
-        }
         processqueue(data);
       }
       else
@@ -213,7 +203,7 @@ AjaxLife.Network.MessageQueue = function() {
         })
       }
     ).then((r) => {
-      queuecallback(r.data);
+      queuecallback(r.status === 200, r.data);
     }).catch((err) => {
       console.error(err);
       AjaxLife.Widgets.Ext.msg("Error in queuecallback",e.name+" - "+e.message);
@@ -350,7 +340,8 @@ AjaxLife.Network.Send = function(message, opts) {
     'api/send',
     querystring,
     {
-      timeout: 60000
+      timeout: 60000,
+      reponseType: 'json'
     }
   ).then((r) => {
     let data = r.data;
@@ -371,7 +362,7 @@ AjaxLife.Network.Send = function(message, opts) {
         AjaxLife.Widgets.Ext.msg(_("Network.Error"),_("Network.GenericSendError"));
       }
   }).catch((err) => {
-    console.error(err);
+    console.error('error sending', err);
     // If the send failed the server presumably didn't get the message, so knock this down one to make sure they still match.
     if(signed)
     {
