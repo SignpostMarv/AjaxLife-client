@@ -284,7 +284,7 @@
 							text: text,
 							leaf: false,
 							draggable: true,
-							icon: AjaxLife.STATIC_ROOT+'images/inventory/'+getfoldericon(-1, text)
+							icon: 'images/inventory/'+getfoldericon(-1, text)
 						});
 						newnode.attributes.PreferredType = -1;
 						newnode.attributes.OwnerID = gAgentID;
@@ -382,7 +382,7 @@
 			text: item.Name,
 			leaf: true,
 			draggable: true,
-			icon: AjaxLife.STATIC_ROOT+'images/inventory/'+getitemicon(item.InventoryType),
+			icon: 'images/inventory/'+getitemicon(item.InventoryType),
 			qtip: perm2string(item.Permissions.OwnerMask)
 		});
 		newnode.attributes.InventoryUUID = item.UUID; // Deprecated - use UUID instead of InventoryUUID.
@@ -419,7 +419,7 @@
 			var root = new Tree.TreeNode({
 				text: _("Inventory.MyInventory"),
 				draggable: false,
-				icon: AjaxLife.STATIC_ROOT+'images/inventory/folder_plain_closed.png'
+				icon: 'images/inventory/folder_plain_closed.png'
 			});
 			
 			// Create a root node. The tree is set up to be analogous to the inventory tree
@@ -430,7 +430,7 @@
 				text: _("Inventory.Loading"),
 				draggable: false,
 				leaf: true,
-				icon: AjaxLife.STATIC_ROOT+'images/s.gif'
+				icon: 'images/s.gif'
 			}));
 			root.firstChild.attributes.UUID = AjaxLife.Utils.UUID.Zero; // So we can tell it's the "loading" thing.
 			inventory[gInventoryRoot] = root;
@@ -556,7 +556,7 @@
 								text: item.Name,
 								leaf: false,
 								draggable: true,
-								icon: AjaxLife.STATIC_ROOT+'images/inventory/'+getfoldericon(item.PreferredType, item.Name)
+								icon: 'images/inventory/'+getfoldericon(item.PreferredType, item.Name)
 							});
 							// 14 is the trash.
 							if(item.PreferredType == 14)
@@ -571,7 +571,7 @@
 								text: _("Inventory.Loading"),
 								draggable: false,
 								leaf: true,
-								icon: AjaxLife.STATIC_ROOT+'images/s.gif'
+								icon: 'images/s.gif'
 							});
 							loadingnode.attributes.UUID = AjaxLife.Utils.UUID.Zero;
 							newnode.appendChild(loadingnode);

@@ -39,7 +39,7 @@ AjaxLife.MiniMap = function() {
 	var imgloaded = false;
 	var water = 20;
 	var active = true;
-	
+
 	// Here's a nice set of colours. Largely gathered by trial and error, and not great.
 	// Some of them are altered later.
 	var heights = {};
@@ -52,18 +52,18 @@ AjaxLife.MiniMap = function() {
 	heights[120] = {red: 255, green: 255, blue: 255};
 	var available = [0,water*0.75,water,water+1,24,100,120];
 	var count = available.length;
-	
+
 	var heightcache = [];
 	// Sets up the redraw delay - used to ensure we don't waste time redrawing excessively.
 	var redrawdelay = new Ext.util.DelayedTask(redraw);
-	
+
 	// This draws the landscape on the visible canvas.
 	function drawLandscape()
 	{
 		// Copy the image from the buffer.
 		context.drawImage(buffer,0,0,256,256);
 	}
-	
+
 	// This is used draw a 16x16m patch of land data to a specified position in the buffer.
 	// We also rotate it 90 degrees to compensate for receiving the data the wrong way up.
 	function drawPatch(c, x, y, patch)
@@ -77,7 +77,7 @@ AjaxLife.MiniMap = function() {
 		var j = 0;
 		// Once we're drawing in the right place, we draw the 256 pixels by interpolating the
 		// required colours.
-		// We're actually drawing 2x2 blocks of same-coloured pixels, as the difference is 
+		// We're actually drawing 2x2 blocks of same-coloured pixels, as the difference is
 		// insignificant, and it takes a quarter of the time to render.
 		for(var i = 0; i < 16; i += 2)
 		{
@@ -125,13 +125,13 @@ AjaxLife.MiniMap = function() {
 		}
 		c.restore();
 	}
-	
+
 	function drawObjects()
 	{
 		// We don't support object data. If we ever do, this function should be used
 		// to render them.
 	}
-	
+
 	// This draws the position of others in the sim.
 	// They're drawn as circles if they're within five metres of us, otherwise
 	// pointing in the right direction.
@@ -190,14 +190,14 @@ AjaxLife.MiniMap = function() {
 			context.stroke();
 		}
 	}
-	
+
 	// Draw ourselves on the map.
 	function drawSelf()
 	{
 		if(!imgloaded) return;
 		context.drawImage(selfimg, pos.x, 256-pos.y, 8/scale,8/scale);
 	}
-	
+
 	// Draw our target, if any, on the map.
 	function drawTarget()
 	{
@@ -206,7 +206,7 @@ AjaxLife.MiniMap = function() {
 			drawMark({X: target.x, Y: target.y, Z: target.z}, 255, 0, 0);
 		}
 	}
-	
+
 	// Wipe the canvas and draw the whole map on it.
 	function redraw()
 	{
@@ -227,7 +227,7 @@ AjaxLife.MiniMap = function() {
 		drawTarget();
 		drawSelf();
 	}
-	
+
 	// Wipe the buffer and fill it with water.
 	function emptyland()
 	{
@@ -235,7 +235,7 @@ AjaxLife.MiniMap = function() {
 		bufferc.fillRect(0,0,256,256);
 		return [];
 	}
-	
+
 	// Adds a patch of land to the buffer, and sets the redraw to
 	// happen in 0.5 seconds' time. The buffer is cleared if we're
 	// in another sim now.
@@ -249,7 +249,7 @@ AjaxLife.MiniMap = function() {
 		drawPatch(bufferc,ox,oy,patch);
 		redrawdelay.delay(500);
 	}
-	
+
 	return {
 		// Draws a mark on the map. If it's a new mark, we just add it,
 		// otherwise it has to be added and then the map redrawn.
@@ -309,7 +309,7 @@ AjaxLife.MiniMap = function() {
 			// Set up the canvas.
 			canvas = $(canvasid);
 			// Bail out if we can't do them. I'm looking at you, Microsoft.
-			// We can't use an emulation layer for IE here for performance reasons - 
+			// We can't use an emulation layer for IE here for performance reasons -
 			// IE only supports vector images, whilst we're performing heavy operations
 			// with pixels. The DOM formed would be horrible.
 			if(!canvas.getContext || !canvas.getContext('2d')) // No canvas support.

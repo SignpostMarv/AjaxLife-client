@@ -32849,7 +32849,6 @@ Ext.LoadMask.prototype = {
         }
     }
 }
-var SERVICES_URL = "http://static.ajaxlife.net/";
 var X_MIN = "200";
 var X_MAX = "2000";
 var Y_MIN = "200";
@@ -32860,7 +32859,7 @@ function slDocumentCreateElement(name) {
     if (name == 'img') {
         ret.onerror = function(faked) {
             var expected_url = ret.src;
-            ret.src = SERVICES_URL + 'images/ocean.jpg';
+            ret.src = 'images/ocean.jpg';
             if (faked === true) {
                 setTimeout(function() {
                     ret.src = expected_url;
@@ -33939,7 +33938,7 @@ function SLJS(C, A, a, Z, Y) {
             return $2l
         };
         var b = 256;
-        var i = "http://map.secondlife.com";
+        var i = "https://s3.amazonaws.com/map.secondlife.com";
         var n = 1280;
         var g = 1100;
         var f = 960;
@@ -34470,7 +34469,7 @@ function SLJS(C, A, a, Z, Y) {
     window.createImage = X.$3G;
     window.isBrowser = $16.$3I
 }
-SLJS(SERVICES_URL, X_MIN, X_MAX, Y_MIN, Y_MAX);
+SLJS('', X_MIN, X_MAX, Y_MIN, Y_MAX);
 var lh = new Object();
 var rlh = new Object();
 var o;
