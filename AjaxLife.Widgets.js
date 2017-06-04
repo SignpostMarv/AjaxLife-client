@@ -57,7 +57,7 @@ AjaxLife.Widgets.Slider = function(parent, id, opts) {
 	});
 	var img = $(document.createElement('img'));
 	img.setAttribute('id',id+'-image');
-	img.setAttribute('src',AjaxLife.STATIC_ROOT+'resources/script.aculo.us/slider-images-handle.png');
+	img.setAttribute('src','resources/script.aculo.us/slider-images-handle.png');
 	img.setStyle({'float': 'left'});
 	handlediv.appendChild(img);
 	div.appendChild(handlediv);
@@ -95,7 +95,7 @@ AjaxLife.Widgets.Ext = function(){
 					identifier: growlid
 				};
 				if(window.fluid) fluid.showGrowlNotification(options);
-				else if(window.callout) callout.notify(options.title, options.description, {icon: AjaxLife.STATIC_ROOT+'images/logo.png'});
+				else if(window.callout) callout.notify(options.title, options.description, {icon: 'images/logo.png'});
 			}
 			// If the notification doesn't want to be shown internally, don't.
         	if(!onlygrowl)

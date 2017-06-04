@@ -130,7 +130,7 @@ function initui()
   let params = new URLSearchParams();
   params.append('sid', gSessionID);
   axios.post(
-    'api/sessiondetails',
+    AjaxLife.API_ROOT + 'sessiondetails',
     params
   ).then((r) => {
       let data = r.data;
@@ -220,7 +220,7 @@ function handlelogin()
     params.append('sim', $('loginsim').value);
     params.append('session', gSessionID);
     axios.post(
-      'api/login',
+      AjaxLife.API_ROOT + 'login',
       params,
       {
         responseType: 'json',

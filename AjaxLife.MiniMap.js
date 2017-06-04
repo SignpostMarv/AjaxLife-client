@@ -327,7 +327,7 @@ AjaxLife.MiniMap = function() {
 				imgloaded = true;
 				drawSelf();
 			};
-			selfimg.src = AjaxLife.STATIC_ROOT+'images/map_marker_you.png';
+			selfimg.src = 'images/map_marker_you.png';
 			pos = {sim: gRegion, x: gPosition.X, y: gPosition.Y, z: gPosition.Z};
 			// Setup callback
 			// This will be called when we have land data. If the water level has changed,

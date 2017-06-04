@@ -18,14 +18,9 @@
     "url": "https://github.com/SignpostMarv/AjaxLife-client/issues"
   },
   "homepage": "https://github.com/SignpostMarv/AjaxLife-client#readme",
-  "dependencies": {},
-  "devDependencies": {
-    "eslint": "^1.0.0",
-    "eslint-config-airbnb": "^5.0.0",
-    "grunt": "^0.4.5",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-eslint": "^17.3.2",
-    "load-grunt-tasks": "^3.4.0"
-  }
+  "dependencies": {
+    "axios": "^0.16.2",
+    "jquery": "~1.4"
+  },
+  "devDependencies": {}
 }

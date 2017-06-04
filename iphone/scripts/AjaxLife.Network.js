@@ -20,7 +20,7 @@ AjaxLife.Network = function() {
 			if(!noprompt && !confirm("Are you sure you want to log out?")) return;
 			if(!message)
 			{
-				new Ajax.Request('api/logout', {
+				new Ajax.Request(AjaxLife.API_ROOT + 'logout', {
 					method: 'post',
 					parameters: {
 						sid: AjaxLife.SessionID
@@ -47,7 +47,7 @@ AjaxLife.Network = function() {
 				callback = opts.callback;
 			}
 			delete opts.callback;
-			new Ajax.Request('api/send', {
+			new Ajax.Request(AjaxLife.API_ROOT + 'send', {
 				method: 'post',
 				parameters: opts,
 				onSuccess: function(xhr) {
@@ -127,7 +127,7 @@ AjaxLife.Network.MessageQueue = function() {
 	{
 		if(requesting) return;
 		requesting = true;
-		new Ajax.Request('api/events', {
+		new Ajax.Request(AjaxLife.API_ROOT + 'events', {
 			method: 'post',
 			parameters: {
 				sid: AjaxLife.SessionID

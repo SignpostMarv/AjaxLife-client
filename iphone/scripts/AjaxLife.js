@@ -12,7 +12,7 @@ AjaxLife = function() {
 	
 	function loadsession()
 	{
-		new Ajax.Request('api/sessiondetails', {
+		new Ajax.Request(AjaxLife.API_ROOT + 'sessiondetails', {
 			method: 'post',
 			parameters: {
 				sid: AjaxLife.SessionID

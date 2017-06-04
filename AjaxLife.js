@@ -65,7 +65,7 @@ AjaxLife.Startup = function() {
 	Ext.QuickTips.init();
 	
 	// Fix the blank images.
-	Ext.BLANK_IMAGE_URL = AjaxLife.STATIC_ROOT+"images/s.gif";
+	Ext.BLANK_IMAGE_URL = "images/s.gif";
 	// Set the button labels - this is important for the localisation.
 	Ext.MessageBox.buttonText = {
 		yes: _("Widgets.Yes"),

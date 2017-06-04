@@ -40,7 +40,7 @@ AjaxLife.Network.logout = function(hidemessage) {
   let params = new URLSearchParams();
   params.set('sid', gSessionID);
   axios.post(
-    'api/logout',
+    AjaxLife.API_ROOT + 'logout',
     params
   ).then((r) => {
       if(r.status === 200)
@@ -194,7 +194,7 @@ AjaxLife.Network.MessageQueue = function() {
     let params = new URLSearchParams();
     params.append('sid', gSessionID);
     axios.post(
-      'api/events',
+      AjaxLife.API_ROOT + 'events',
       params,
       {
         timeout: 60000,
@@ -337,7 +337,7 @@ AjaxLife.Network.Send = function(message, opts) {
     querystring.set('hash', hash);
   }
   axios.post(
-    'api/send',
+    AjaxLife.API_ROOT + 'send',
     querystring,
     {
       timeout: 60000,

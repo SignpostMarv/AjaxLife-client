@@ -69,13 +69,13 @@ AjaxLife.Texture = function(parent, width, height, texture, slsearch, forceslsea
 		paddingRight: (width/2-16)+'px',
 		paddingTop: (height/2-16)+'px',
 		paddingBottom: (height/2-16)+'px'
-	}).setAttribute('src',AjaxLife.STATIC_ROOT+'images/loader.gif');
+	}).setAttribute('src','images/loader.gif');
 	$(parent).appendChild(elem);
 	// If the UUID is null, we just stick the no-image image up.
 	if(texture == AjaxLife.Utils.UUID.Zero)
 	{
 		AjaxLife.Debug("Texture: Replacing null image with default texture");
-		replaceimage(AjaxLife.STATIC_ROOT+'images/noimage.png');
+		replaceimage('images/noimage.png');
 	}
 	else
 	{
@@ -99,7 +99,7 @@ AjaxLife.Texture = function(parent, width, height, texture, slsearch, forceslsea
 					else
 					{
 						AjaxLife.Debug("Texture: Downloading "+data.UUID+" failed");
-						replaceimage(AjaxLife.STATIC_ROOT+'images/noimage.png');
+						replaceimage('images/noimage.png');
 						AjaxLife.Widgets.Ext.msg("",_("Texture.DownloadFailed"));
 					}
 				}
@@ -185,7 +185,7 @@ AjaxLife.InventoryDialogs.Texture = function(textureid, name) {
 	// Create new texture object at 256x256.
 	texture = new AjaxLife.Texture(win.body.dom, 256, 256, textureid, false, false, function() {
 		win.body.setStyle({
-			backgroundImage: 'url('+AjaxLife.STATIC_ROOT+'images/transparency.gif)'
+			backgroundImage: 'url('+'images/transparency.gif)'
 		});
 	});
 	// Resize the texture when the window is resized, ensuring it always fills the window.

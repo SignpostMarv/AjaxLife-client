@@ -31,7 +31,7 @@
  	{
  		if(enabled)
  		{
- 			Sound.play(AjaxLife.STATIC_ROOT+"sounds/"+escape(sound)+".wav");
+ 			Sound.play("sounds/"+escape(sound)+".wav");
  		}
  	}
  	
