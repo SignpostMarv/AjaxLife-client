@@ -1,2 +1,4 @@
 /node_modules/
 /yarn-error.log
+/www-root/node_modules/
+/www-root/yarn-error.log
