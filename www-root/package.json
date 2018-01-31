@@ -20,7 +20,7 @@
   "homepage": "https://github.com/SignpostMarv/AjaxLife-client#readme",
   "dependencies": {
     "axios": "^0.16.2",
-    "jquery": "~1.4"
+    "jquery": "^3.3.1"
   },
   "devDependencies": {}
 }
